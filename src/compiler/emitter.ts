@@ -341,7 +341,6 @@ import {
     PrinterOptions,
     PrintHandlers,
     PrivateIdentifier,
-    ProgramBuildInfo,
     PropertyAccessExpression,
     PropertyAssignment,
     PropertyDeclaration,
@@ -787,7 +786,7 @@ export function emitFiles(
             emitSkipped = true;
             return;
         }
-        const buildInfo = host.getBuildInfo() || createBuildInfo(/*program*/ undefined);
+        const buildInfo = host.getBuildInfo() || { version };
         // Pass buildinfo as additional data to avoid having to reparse
         writeFile(host, emitterDiagnostics, buildInfoPath, getBuildInfoText(buildInfo), /*writeByteOrderMark*/ false, /*sourceFiles*/ undefined, { buildInfo });
         emittedFilesList?.push(buildInfoPath);
@@ -1106,11 +1105,6 @@ export function emitFiles(
 }
 
 /** @internal */
-export function createBuildInfo(program: ProgramBuildInfo | undefined): BuildInfo {
-    return { program, version };
-}
-
-/** @internal */
 export function getBuildInfoText(buildInfo: BuildInfo) {
     return JSON.stringify(buildInfo);
 }
@@ -1160,6 +1154,7 @@ export const notImplementedResolver: EmitResolver = {
     isBindingCapturedByNode: notImplemented,
     getDeclarationStatementsForSourceFile: notImplemented,
     isImportRequiredByAugmentation: notImplemented,
+    isDefinitelyReferenceToGlobalSymbolObject: notImplemented,
 };
 
 const enum PipelinePhase {
